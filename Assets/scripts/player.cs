@@ -14,12 +14,28 @@ public class player : MonoBehaviour
     private Rigidbody2D rb; // Подключаем физику
     private float horizontal_input; // Переменная для движения по оси X
     private Animator anim; // добавили аниматора
+    [Header ("Прыжок от колючек")]
+    public int jumpDamageForce;
+
+    public LayerMask jumpDamageLayer;
+
+    public Transform JumpSpikeCheck;
+
+    private float JumpSpikeRadius = 0.2f;
+
+    public bool JumpSpiked;
+
+    public int JumpSpikeObject;
+    
+
     void Start()
     {
         //Находим компонент физики один раз при старте
         rb = GetComponent<Rigidbody2D>();
         // Находим компоненты аниматора
         anim = GetComponent<Animator>();
+
+        
         
     }
 
@@ -37,11 +53,23 @@ public class player : MonoBehaviour
         {
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         }
+
+        if (JumpSpikeCheck != null)
+        {
+            JumpSpiked = Physics2D.OverlapCircle(JumpSpikeCheck.position, JumpSpikeRadius, jumpDamageLayer);
+        }
+
+        if (JumpSpiked)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpDamageForce);
+        }
+
         //Прыгаем, только если нажат Пробел И персонаж на земле!
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
+
         if (anim != null)
         {
             anim.SetFloat("speed", Mathf.Abs(horizontal_input));
