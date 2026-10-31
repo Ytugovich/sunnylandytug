@@ -15,17 +15,17 @@ public class player : MonoBehaviour
     private float horizontal_input; // Переменная для движения по оси X
     private Animator anim; // добавили аниматора
     [Header ("Прыжок от колючек")]
-    public int jumpDamageForce;
+    public int jumpDamageForce; //сила прыжка от шипов
 
-    public LayerMask jumpDamageLayer;
+    public LayerMask jumpDamageLayer; // добавление слоя к шипам
 
-    public Transform JumpSpikeCheck;
+    public Transform JumpSpikeCheck; // добавляем кружок который будет реагировать на шип
 
-    private float JumpSpikeRadius = 0.2f;
+    private float JumpSpikeRadius = 0.2f; //радиус этого кружка
 
-    public bool JumpSpiked;
+    public bool JumpSpiked; //переменная укололись ли мы
 
-    public int JumpSpikeObject;
+    
     
 
     void Start()
@@ -46,19 +46,21 @@ public class player : MonoBehaviour
         horizontal_input = Input.GetAxisRaw("Horizontal");
         //Задаем движение персонажа с помощью физики по оси x, а по оси Y сохраняем
         rb.linearVelocity = new Vector2(horizontal_input * speed, rb.linearVelocity.y);
+
         //Разворачиваем персонажа
         Flip();
+
         //Проверяем стоим ли на земле
         if (groundCheck != null)
         {
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         }
-
+        //проверяем косаемся ли мы шипов
         if (JumpSpikeCheck != null)
         {
             JumpSpiked = Physics2D.OverlapCircle(JumpSpikeCheck.position, JumpSpikeRadius, jumpDamageLayer);
         }
-
+        //если косаемся то прыгаем
         if (JumpSpiked)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpDamageForce);
