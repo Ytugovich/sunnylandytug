@@ -11,7 +11,10 @@ public class Bullet : MonoBehaviour
     
     public float speed;
 
+    public int damageValue;
     private Rigidbody2D rb;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -29,9 +32,10 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
-        if (collision.CompareTag("enemy")) 
+        if (collision.CompareTag("enemy"))
         {
-            
+            collision.GetComponent<enemyTeapot>().takeDamage(damageValue);
+
             Destroy(gameObject);
 
         }
